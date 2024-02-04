@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select";
 import { useState, useRef } from "react";
 import { CalendarIcon } from "@radix-ui/react-icons";
-import { format } from "date-fns";
+import { endOfDay, format,formatDistance} from "date-fns";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -31,7 +31,7 @@ export default function CreateTaskDialoge() {
     const inputRef = useRef(null);
     const [status, setstatus] = useState('');
     const [priority, setpriority] = useState('');
-
+    const [ deadline,setdeadline] = useState(Date);
     async function HandleSubmit() {
         let inputData = inputRef.current.value;
         const options = {
@@ -43,15 +43,18 @@ export default function CreateTaskDialoge() {
             body: JSON.stringify({
                 title: inputData,
                 status: status,
-                priority: priority
+                priority: priority,
+                deadline:deadline
             })
         };
     
         try {
-            const response = await fetch('https://task-manager-api-cbx5.onrender.com/', options);
+            const deadlineDay= format(deadline,'d');
+            const deadlineMonth=format(deadline,'L');
+            const deadlineYear=format(deadline,'Y');
+            console.log(deadline);
+            const response = await fetch('https://task-manager-api-1-8sfc.onrender.com/', options);
             const data = await response.json(); // Use await here to get the parsed JSON data
-    
-            console.log(JSON.stringify(data));
         } catch (e) {
             console.error(e.message);
         }
@@ -63,13 +66,16 @@ export default function CreateTaskDialoge() {
     }function HandlePriorityChange(priority) {
         setpriority(priority);
     }
+    function HandleDeadlineChange(deadline) {
+        setdeadline(deadline);
+    }
 
 
     return (
         <Dialog>
             <DialogTrigger asChild>
                 <Button>
-                    <PlusIcon /> Create New Task
+                    <PlusIcon className="mr-2" /> Create New Task
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
@@ -102,7 +108,7 @@ export default function CreateTaskDialoge() {
                         <Label htmlFor="deadline" className="text-right">
                             Deadline
                         </Label>
-                        {/* Include your DeadlineSelector component here */}
+                        <DeadlineSelector deadlineHandler={HandleDeadlineChange}/>
                     </div>
                 </div>
                 <DialogFooter>
@@ -123,10 +129,11 @@ function StatusSelector(props) {
                 <SelectValue placeholder="select one" />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="todo">Todo</SelectItem>
-                <SelectItem value="inprogress">In Progress</SelectItem>
-                <SelectItem value="done">Done</SelectItem>
-                <SelectItem value="backlog">Backlog</SelectItem>
+                <SelectItem value="Todo">Todo</SelectItem>
+                <SelectItem value="In Progress">In Progress</SelectItem>
+                <SelectItem value="Done">Done</SelectItem>
+                <SelectItem value="Backlog">Backlog</SelectItem>
+                <SelectItem value="Canceled">Canceled</SelectItem>
             </SelectContent>
         </Select>
     );
@@ -137,16 +144,17 @@ function PrioritySelector(props){
             <SelectValue placeholder="select one"/>
         </SelectTrigger>
         <SelectContent>
-            <SelectItem value="low">Low</SelectItem>
-            <SelectItem value="medium">Medium</SelectItem>
-            <SelectItem value="high">High</SelectItem>
+            <SelectItem value="Low">Low</SelectItem>
+            <SelectItem value="Medium">Medium</SelectItem>
+            <SelectItem value="High">High</SelectItem>
         </SelectContent>
     </Select>
 }
 
-function DeadlineSelector(){
-    const [date, setDate] = useState();
+function DeadlineSelector(props){
+    const [date, setDate] = useState(Date);
 
+    
     return (
       <Popover>
         <PopoverTrigger asChild>
@@ -162,8 +170,14 @@ function DeadlineSelector(){
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
-          <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+          <Calendar mode="single"  selected={date} onSelect={(newDate) => {
+            setDate(newDate);
+            props.deadlineHandler(newDate); // Pass the selected date to the parent component
+          }} initialFocus />
         </PopoverContent>
       </Popover>
     );
   }
+
+
+  
