@@ -19,6 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import EditTaskDialoge from "./Task-Components/create-task-dialouge";
 
 const columns = [
   {
@@ -46,6 +47,7 @@ const columns = [
 function App() {
 
   const [taskData, setTaskData] = useState(Data);
+  const[trigerapi,settrigerapi] = useState(false);
 
   useEffect(() => {
     fetch('https://task-manager-api-1-8sfc.onrender.com/', { method: 'GET' })
@@ -61,14 +63,18 @@ function App() {
       });
 
       
-  }, []);
+  }, [trigerapi]);
+
+  function ApiTrigger(){
+    settrigerapi(!trigerapi);
+  }
 
   return (
     <div className="outer-border">
       <div className="title">Welcome back!</div>
       <div className="subtitle">Here's a list of your tasks for this month!</div>
       <div className="add-task-button">
-        <CreateTaskDialoge />
+        <CreateTaskDialoge trigger={ApiTrigger}/>
       </div>
       <div className="table-border">
         <Table>
@@ -89,7 +95,7 @@ function App() {
                 <TableCell>{PriorityIconGetter(data.priority)}</TableCell>
                 <TableCell>{data.deadline == null ? <div>No Deadline</div>: DeadlineGetter(data.deadline.toString())}</TableCell>
                 <TableCell>
-                  {DropDownItems(data._id)}
+                  {DropDownItems(data._id,ApiTrigger,data)}
                 </TableCell>
               </TableRow>
             ))}
@@ -153,23 +159,37 @@ function PriorityIconGetter(priority){
     }
  }
  //<div className="h-2 w-2 rounded bg-red-600"></div>
- function DropDownItems(id){
+ function DropDownItems(id,ApiTrigger,data){
   return <DropdownMenu>
     <DropdownMenuTrigger>
     <Button variant="outline" size="icon"><DotsHorizontalIcon /></Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent>
-      <DropdownMenuItem>Edit</DropdownMenuItem>
-      <DropdownMenuItem onSelect={()=>DeleteTask(id)}>Delete</DropdownMenuItem>
+      <DropdownMenuItem >{ShowEdit(data)}</DropdownMenuItem>
+      <DropdownMenuItem onSelect={()=>DeleteTask(id,ApiTrigger)}>Delete</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
  }
 
+ async function ShowEdit(data){
+  await setTimeout(function () {
+    console.log('Hello from setTimeout')
+},
+
+
+
+3000);
+  return <EditTaskDialoge value={data}/>
+  
+ }
+
+
+
 
  //api functions
- async function DeleteTask(id){
+ async function DeleteTask(id,ApiTrigger){
   try{
-    await fetch(`https://task-manager-api-1-8sfc.onrender.com/${id}`,{method:"DELETE"}).then((Response)=>{console.log(Response)})
+    await fetch(`https://task-manager-api-1-8sfc.onrender.com/${id}`,{method:"DELETE"}).then((Response)=>(Response.json())).then((data)=>{console.log(data.status)}).then(()=>ApiTrigger())
   }catch(e){
     console.log("error");
     console.log(e);

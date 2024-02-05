@@ -27,7 +27,7 @@ import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
-export default function CreateTaskDialoge(props) {
+export default function EditTaskDialoge(props) {
     const inputRef = useRef(null);
     const [status, setstatus] = useState('');
     const [priority, setpriority] = useState('');
@@ -72,15 +72,15 @@ export default function CreateTaskDialoge(props) {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant='outline'>
-                    Edit
+                <Button>
+                    <PlusIcon className="mr-2" /> Create New Task
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>New task</DialogTitle>
+                    <DialogTitle>Update task</DialogTitle>
                     <DialogDescription>
-                        Add your task details here. Click save when you're done.
+                        Update your task details here. Click save when you're done.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
@@ -88,7 +88,7 @@ export default function CreateTaskDialoge(props) {
                         <Label htmlFor="title" className="text-right">
                             Title
                         </Label>
-                        <Input id="title" className="col-span-3" ref={inputRef} />
+                        <Input id="title" className="col-span-3"  ref={inputRef} />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="status" className="text-right">
