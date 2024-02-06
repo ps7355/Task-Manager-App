@@ -7,7 +7,7 @@ import './App.css';
 import Data from "./lib/data";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "./components/ui/button";
-import { PlusIcon, DotsHorizontalIcon, ValueIcon,StopwatchIcon,CrossCircledIcon,QuestionMarkCircledIcon, CheckCircledIcon, ArrowDownIcon,ArrowUpIcon,ArrowRightIcon } from "@radix-ui/react-icons";
+import { PlusIcon, Pencil1Icon,DotsHorizontalIcon, ValueIcon,StopwatchIcon,CrossCircledIcon,QuestionMarkCircledIcon, CheckCircledIcon, ArrowDownIcon,ArrowUpIcon,ArrowRightIcon } from "@radix-ui/react-icons";
 import { useState, useEffect } from "react";
 import CreateTaskDialoge from "./Task-Components/create-task-dialouge";
 import { endOfDay, format, formatDistanceStrict } from "date-fns";
@@ -19,7 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import EditTaskDialoge from "./Task-Components/create-task-dialouge";
+import EditTaskDialoge from "./Task-Components/update-task-items";
 
 const columns = [
   {
@@ -94,6 +94,7 @@ function App() {
                 <TableCell>{StatusIconGetter(data.status)}</TableCell>
                 <TableCell>{PriorityIconGetter(data.priority)}</TableCell>
                 <TableCell>{data.deadline == null ? <div>No Deadline</div>: DeadlineGetter(data.deadline.toString())}</TableCell>
+                <TableCell>{<EditTaskDialoge data={data}/>}</TableCell>
                 <TableCell>
                   {DropDownItems(data._id,ApiTrigger,data)}
                 </TableCell>
@@ -165,23 +166,16 @@ function PriorityIconGetter(priority){
     <Button variant="outline" size="icon"><DotsHorizontalIcon /></Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent>
-      <DropdownMenuItem >{ShowEdit(data)}</DropdownMenuItem>
       <DropdownMenuItem onSelect={()=>DeleteTask(id,ApiTrigger)}>Delete</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
  }
 
- async function ShowEdit(data){
-  await setTimeout(function () {
-    console.log('Hello from setTimeout')
-},
-
-
-
-3000);
-  return <EditTaskDialoge value={data}/>
+ 
+ //edit task
+ 
   
- }
+  
 
 
 

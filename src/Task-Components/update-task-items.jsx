@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { PlusIcon } from "@radix-ui/react-icons";
+import { PlusIcon,Pencil1Icon } from "@radix-ui/react-icons";
 import {
     Select,
     SelectContent,
@@ -20,7 +20,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { useState, useRef } from "react";
+import { useState, useRef,useEffect } from "react";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { endOfDay, format,formatDistance} from "date-fns";
 import { cn } from "@/lib/utils";
@@ -28,7 +28,11 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 export default function EditTaskDialoge(props) {
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    
+    
     const inputRef = useRef(null);
+    const buttonRef = useRef(null);
     const [status, setstatus] = useState('');
     const [priority, setpriority] = useState('');
     const [ deadline,setdeadline] = useState(Date);
@@ -68,13 +72,12 @@ export default function EditTaskDialoge(props) {
         setdeadline(deadline);
     }
 
+   
 
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button>
-                    <PlusIcon className="mr-2" /> Create New Task
-                </Button>
+                <Pencil1Icon/>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -88,7 +91,7 @@ export default function EditTaskDialoge(props) {
                         <Label htmlFor="title" className="text-right">
                             Title
                         </Label>
-                        <Input id="title" className="col-span-3"  ref={inputRef} />
+                        <Input value={props.data.title} id="title" className="col-span-3"  ref={inputRef} />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="status" className="text-right">

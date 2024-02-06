@@ -70,10 +70,10 @@ export default function CreateTaskDialoge(props) {
 
 
     return (
-        <Dialog>
+        <Dialog >
             <DialogTrigger asChild>
-                <Button variant='outline'>
-                    Edit
+            <Button>
+                    <PlusIcon className="mr-2" /> Create New Task
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
