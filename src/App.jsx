@@ -94,7 +94,7 @@ function App() {
                 <TableCell>{StatusIconGetter(data.status)}</TableCell>
                 <TableCell>{PriorityIconGetter(data.priority)}</TableCell>
                 <TableCell>{data.deadline == null ? <div>No Deadline</div>: DeadlineGetter(data.deadline.toString())}</TableCell>
-                <TableCell>{<EditTaskDialoge data={data}/>}</TableCell>
+                <TableCell>{<EditTaskDialoge trigger={ApiTrigger}data={data}/>}</TableCell>
                 <TableCell>
                   {DropDownItems(data._id,ApiTrigger,data)}
                 </TableCell>

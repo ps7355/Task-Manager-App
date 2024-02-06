@@ -65,6 +65,7 @@ export default function CreateTaskDialoge(props) {
         setpriority(priority);
     }
     function HandleDeadlineChange(deadline) {
+        console.log(deadline);
         setdeadline(deadline);
     }
 

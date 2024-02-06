@@ -29,17 +29,17 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 
 export default function EditTaskDialoge(props) {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    
+    console.log(props.data.deadline);
     
     const inputRef = useRef(null);
     const buttonRef = useRef(null);
-    const [status, setstatus] = useState('');
-    const [priority, setpriority] = useState('');
-    const [ deadline,setdeadline] = useState(Date);
+    const [status, setstatus] = useState(props.data.status);
+    const [priority, setpriority] = useState(props.data.priority);
+    const [ deadline,setdeadline] = useState(props.data.deadline);
     async function HandleSubmit() {
         let inputData = inputRef.current.value;
         const options = {
-            method: 'POST',
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 // You might need additional headers here
@@ -54,7 +54,7 @@ export default function EditTaskDialoge(props) {
     
         try {
             
-            const response = await fetch('https://task-manager-api-1-8sfc.onrender.com/', options);
+            const response = await fetch(`https://task-manager-api-1-8sfc.onrender.com/${props.data._id}`, options);
             const data = await response.json(); 
             props.trigger();
         } catch (e) {
@@ -73,6 +73,7 @@ export default function EditTaskDialoge(props) {
     }
 
    
+     // it is a string value 
 
     return (
         <Dialog>
@@ -91,25 +92,25 @@ export default function EditTaskDialoge(props) {
                         <Label htmlFor="title" className="text-right">
                             Title
                         </Label>
-                        <Input value={props.data.title} id="title" className="col-span-3"  ref={inputRef} />
+                        <Input defaultValue={props.data.title} id="title" className="col-span-3"  ref={inputRef} />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="status" className="text-right">
                             Status
                         </Label>
-                        <StatusSelector statusHandler={HandleStatusChange} selectedStatus={status} />
+                        <StatusSelector val={props.data.status} statusHandler={HandleStatusChange} selectedStatus={status} />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="priority" className="text-right">
                             Priority
                         </Label>
-                       <PrioritySelector priorityHandler={HandlePriorityChange}/>
+                       <PrioritySelector val={props.data.priority} priorityHandler={HandlePriorityChange}/>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="deadline" className="text-right">
                             Deadline
                         </Label>
-                        <DeadlineSelector deadlineHandler={HandleDeadlineChange}/>
+                        <DeadlineSelector val={props.data.deadline} deadlineHandler={HandleDeadlineChange}/>
                     </div>
                 </div>
                 <DialogFooter>
@@ -125,11 +126,11 @@ export default function EditTaskDialoge(props) {
 function StatusSelector(props) {
    
     return (
-        <Select  onValueChange={props.statusHandler}>
+        <Select defaultValue={props.val}  onValueChange={props.statusHandler}>
             <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="select one" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent >
                 <SelectItem value="Todo">Todo</SelectItem>
                 <SelectItem value="In Progress">In Progress</SelectItem>
                 <SelectItem value="Done">Done</SelectItem>
@@ -140,7 +141,7 @@ function StatusSelector(props) {
     );
 }
 function PrioritySelector(props){
-    return <Select onValueChange={props.priorityHandler}>
+    return <Select defaultValue={props.val} onValueChange={props.priorityHandler}>
         <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="select one"/>
         </SelectTrigger>
@@ -153,7 +154,7 @@ function PrioritySelector(props){
 }
 
 function DeadlineSelector(props){
-    const [date, setDate] = useState(Date);
+    const [date, setDate] = useState(props.val);
 
     
     return (
@@ -171,9 +172,9 @@ function DeadlineSelector(props){
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
-          <Calendar mode="single"  selected={date} onSelect={(newDate) => {
+          <Calendar mode="single"  selected={props.val} onSelect={(newDate) => {
+            props.deadlineHandler(newDate);
             setDate(newDate);
-            props.deadlineHandler(newDate); // Pass the selected date to the parent component
           }} initialFocus />
         </PopoverContent>
       </Popover>
