@@ -25,7 +25,8 @@ body{
    margin-right: 25px;
    margin-left: 25px;
    margin-bottom: 15px;
-   border: 1px solid  rgb(216, 207, 207);
+   border: 1px solid  rgb(175, 169, 169);
+   border-radius: 5px;
    box-shadow:  0 0 1px #dcd8d8;
 }
 
@@ -50,5 +51,9 @@ body{
 .demo{
   display: flex;
   flex-direction: row;
+}
+
+.custom-table {
+  border: 2px solid #45474f; /* Set the border color of the table */
 }
 

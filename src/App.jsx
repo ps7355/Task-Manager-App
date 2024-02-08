@@ -71,39 +71,39 @@ function App() {
 
   return (
     <div className="outer-border">
-      <div className="title">Welcome back!</div>
-      <div className="subtitle">Here's a list of your tasks for this month!</div>
-      <div className="add-task-button">
-        <CreateTaskDialoge trigger={ApiTrigger}/>
-      </div>
-      <div className="table-border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              {columns.map(column => (
-                <TableHead  key={column.accessorKey}>{column.header}</TableHead>
-              ))}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {taskData.map((data, index) => (
-              // Apply the custom class to the TableRow component
-              <TableRow key={index} className="custom-table-row">
-                <TableCell className="h-4 ">{index + 1}</TableCell>
-                <TableCell className='title-style'>{data.title}</TableCell>
-                <TableCell>{StatusIconGetter(data.status)}</TableCell>
-                <TableCell>{PriorityIconGetter(data.priority)}</TableCell>
-                <TableCell>{data.deadline == null ? <div>No Deadline</div>: DeadlineGetter(data.deadline.toString())}</TableCell>
-                <TableCell>{<EditTaskDialoge trigger={ApiTrigger}data={data}/>}</TableCell>
-                <TableCell>
-                  {DropDownItems(data._id,ApiTrigger,data)}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+    <div className="title">Welcome back!</div>
+    <div className="subtitle">Here's a list of your tasks for this month!</div>
+    <div className="add-task-button">
+      <CreateTaskDialoge trigger={ApiTrigger}/>
     </div>
+    <div className="table-border">
+      <Table className="custom-table"> 
+        <TableHeader >
+          <TableRow>
+            {columns.map(column => (
+              <TableHead className="text-black" key={column.accessorKey}>{column.header}</TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {taskData.map((data, index) => (
+            // Apply the custom class to the TableRow component
+            <TableRow key={index} className="custom-table-row">
+              <TableCell className="h-4 ">{index + 1}</TableCell>
+              <TableCell className='title-style'>{data.title}</TableCell>
+              <TableCell>{StatusIconGetter(data.status)}</TableCell>
+              <TableCell>{PriorityIconGetter(data.priority)}</TableCell>
+              <TableCell>{data.deadline == null ? <div>No Deadline</div>: DeadlineGetter(data.deadline.toString())}</TableCell>
+              <TableCell>{<EditTaskDialoge trigger={ApiTrigger}data={data}/>}</TableCell>
+              <TableCell>
+                {DropDownItems(data._id,ApiTrigger,data)}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  </div>
   );
 }
 

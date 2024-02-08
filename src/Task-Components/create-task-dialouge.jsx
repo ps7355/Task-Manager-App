@@ -80,7 +80,7 @@ export default function CreateTaskDialoge(props) {
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>New task</DialogTitle>
-                    <DialogDescription>
+                    <DialogDescription className="text-black">
                         Add your task details here. Click save when you're done.
                     </DialogDescription>
                 </DialogHeader>
